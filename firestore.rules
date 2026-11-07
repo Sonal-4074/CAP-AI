@@ -1,0 +1,221 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\.]+$');
+    }
+
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() > 0 && data.email.size() <= 120 &&
+             data.targetExamination is string && data.targetExamination.size() > 0 && data.targetExamination.size() <= 100 &&
+             (!('dailyQuestionTarget' in data) || (data.dailyQuestionTarget is int && data.dailyQuestionTarget >= 1 && data.dailyQuestionTarget <= 200)) &&
+             (!('preferredDifficulty' in data) || (data.preferredDifficulty is string && data.preferredDifficulty.size() <= 50)) &&
+             (!('studyStreak' in data) || (data.studyStreak is int && data.studyStreak >= 0)) &&
+             (!('preferredCategories' in data) || (data.preferredCategories is list && data.preferredCategories.size() <= 30)) &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time));
+    }
+
+    function isValidQuizAttempt(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.quizType is string && data.quizType.size() > 0 && data.quizType.size() <= 50 &&
+             data.topic is string && data.topic.size() > 0 && data.topic.size() <= 150 &&
+             (!('targetExamination' in data) || (data.targetExamination is string && data.targetExamination.size() <= 100)) &&
+             data.totalQuestions is int && data.totalQuestions >= 1 && data.totalQuestions <= 200 &&
+             (!('attemptedQuestions' in data) || (data.attemptedQuestions is int && data.attemptedQuestions >= 0)) &&
+             data.correctAnswers is int && data.correctAnswers >= 0 &&
+             (!('incorrectAnswers' in data) || (data.incorrectAnswers is int && data.incorrectAnswers >= 0)) &&
+             (!('unattemptedQuestions' in data) || (data.unattemptedQuestions is int && data.unattemptedQuestions >= 0)) &&
+             data.accuracy is number && data.accuracy >= 0 && data.accuracy <= 100 &&
+             (!('timeTakenSeconds' in data) || (data.timeTakenSeconds is int && data.timeTakenSeconds >= 0)) &&
+             (!('score' in data) || data.score is number) &&
+             data.completedAt is timestamp && data.completedAt <= request.time;
+    }
+
+    function isValidTopicPerformance(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.topic is string && data.topic.size() > 0 && data.topic.size() <= 150 &&
+             data.attempted is int && data.attempted >= 0 &&
+             data.correct is int && data.correct >= 0 &&
+             (!('incorrect' in data) || (data.incorrect is int && data.incorrect >= 0)) &&
+             data.accuracy is number && data.accuracy >= 0 && data.accuracy <= 100 &&
+             data.masteryLevel is string && data.masteryLevel.size() > 0 && data.masteryLevel.size() <= 50 &&
+             (!('weakConcepts' in data) || (data.weakConcepts is list && data.weakConcepts.size() <= 50)) &&
+             (!('repeatedMistakes' in data) || (data.repeatedMistakes is int && data.repeatedMistakes >= 0)) &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidBookmark(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.contentType is string && data.contentType.size() > 0 && data.contentType.size() <= 50 &&
+             data.contentId is string && data.contentId.size() > 0 && data.contentId.size() <= 150 &&
+             data.title is string && data.title.size() > 0 && data.title.size() <= 300 &&
+             (!('summary' in data) || (data.summary is string && data.summary.size() <= 1000)) &&
+             (!('category' in data) || (data.category is string && data.category.size() <= 100)) &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    function isValidKnowledgeMap(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.articleId is string && data.articleId.size() > 0 && data.articleId.size() <= 150 &&
+             data.mainTopic is string && data.mainTopic.size() > 0 && data.mainTopic.size() <= 200 &&
+             data.rawJson is string && data.rawJson.size() > 0 && data.rawJson.size() <= 50000 &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    function isValidRevisionNote(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.topic is string && data.topic.size() > 0 && data.topic.size() <= 150 &&
+             (!('concepts' in data) || (data.concepts is list && data.concepts.size() <= 50)) &&
+             data.summary is string && data.summary.size() > 0 && data.summary.size() <= 10000 &&
+             (!('keyFacts' in data) || (data.keyFacts is list && data.keyFacts.size() <= 50)) &&
+             (!('previousAccuracy' in data) || data.previousAccuracy is number) &&
+             (!('newAccuracy' in data) || data.newAccuracy is number) &&
+             data.status is string && data.status.size() > 0 && data.status.size() <= 50 &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    // User Profile Document
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+      allow list: if false;
+
+      allow create: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       isValidId(userId) &&
+                       incoming().userId == request.auth.uid &&
+                       incoming().keys().hasAll(['userId', 'name', 'email', 'targetExamination', 'createdAt']) &&
+                       incoming().keys().hasOnly(['userId', 'name', 'email', 'targetExamination', 'dailyQuestionTarget', 'preferredDifficulty', 'studyStreak', 'preferredCategories', 'createdAt', 'updatedAt']) &&
+                       isValidUserProfile(incoming());
+
+      allow update: if isSignedIn() &&
+                       request.auth.uid == userId &&
+                       isValidId(userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['name', 'targetExamination', 'dailyQuestionTarget', 'preferredDifficulty', 'studyStreak', 'preferredCategories', 'updatedAt']);
+
+      allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(userId);
+
+      // Subcollection: Quiz Attempts
+      match /quizAttempts/{attemptId} {
+        allow get: if isSignedIn() && request.auth.uid == userId && isValidId(attemptId);
+        allow list: if isSignedIn() && request.auth.uid == userId;
+
+        allow create: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(attemptId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().keys().hasAll(['userId', 'quizType', 'topic', 'totalQuestions', 'correctAnswers', 'accuracy', 'completedAt']) &&
+                         incoming().keys().hasOnly(['userId', 'quizType', 'topic', 'targetExamination', 'totalQuestions', 'attemptedQuestions', 'correctAnswers', 'incorrectAnswers', 'unattemptedQuestions', 'accuracy', 'timeTakenSeconds', 'score', 'completedAt']) &&
+                         isValidQuizAttempt(incoming());
+
+        allow update: if false;
+        allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(attemptId);
+      }
+
+      // Subcollection: Topic Performance
+      match /userPerformance/{topicId} {
+        allow get: if isSignedIn() && request.auth.uid == userId && isValidId(topicId);
+        allow list: if isSignedIn() && request.auth.uid == userId;
+
+        allow create: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(topicId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().keys().hasAll(['userId', 'topic', 'attempted', 'correct', 'accuracy', 'masteryLevel', 'updatedAt']) &&
+                         incoming().keys().hasOnly(['userId', 'topic', 'attempted', 'correct', 'incorrect', 'accuracy', 'masteryLevel', 'weakConcepts', 'repeatedMistakes', 'updatedAt']) &&
+                         isValidTopicPerformance(incoming());
+
+        allow update: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(topicId) &&
+                         incoming().userId == existing().userId &&
+                         isValidTopicPerformance(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['attempted', 'correct', 'incorrect', 'accuracy', 'masteryLevel', 'weakConcepts', 'repeatedMistakes', 'updatedAt']);
+
+        allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(topicId);
+      }
+
+      // Subcollection: Bookmarks
+      match /bookmarks/{bookmarkId} {
+        allow get: if isSignedIn() && request.auth.uid == userId && isValidId(bookmarkId);
+        allow list: if isSignedIn() && request.auth.uid == userId;
+
+        allow create: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(bookmarkId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().keys().hasAll(['userId', 'contentType', 'contentId', 'title', 'createdAt']) &&
+                         incoming().keys().hasOnly(['userId', 'contentType', 'contentId', 'title', 'summary', 'category', 'createdAt']) &&
+                         isValidBookmark(incoming());
+
+        allow update: if false;
+        allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(bookmarkId);
+      }
+
+      // Subcollection: Knowledge Maps
+      match /knowledgeMaps/{mapId} {
+        allow get: if isSignedIn() && request.auth.uid == userId && isValidId(mapId);
+        allow list: if isSignedIn() && request.auth.uid == userId;
+
+        allow create: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(mapId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().keys().hasAll(['userId', 'articleId', 'mainTopic', 'rawJson', 'createdAt']) &&
+                         incoming().keys().hasOnly(['userId', 'articleId', 'mainTopic', 'rawJson', 'createdAt']) &&
+                         isValidKnowledgeMap(incoming());
+
+        allow update: if false;
+        allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(mapId);
+      }
+
+      // Subcollection: Revision Notes
+      match /revisionNotes/{noteId} {
+        allow get: if isSignedIn() && request.auth.uid == userId && isValidId(noteId);
+        allow list: if isSignedIn() && request.auth.uid == userId;
+
+        allow create: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(noteId) &&
+                         incoming().userId == request.auth.uid &&
+                         incoming().keys().hasAll(['userId', 'topic', 'summary', 'status', 'createdAt']) &&
+                         incoming().keys().hasOnly(['userId', 'topic', 'concepts', 'summary', 'keyFacts', 'previousAccuracy', 'newAccuracy', 'status', 'createdAt']) &&
+                         isValidRevisionNote(incoming());
+
+        allow update: if isSignedIn() &&
+                         request.auth.uid == userId &&
+                         isValidId(noteId) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         isValidRevisionNote(incoming()) &&
+                         incoming().diff(existing()).affectedKeys().hasOnly(['newAccuracy', 'status']);
+
+        allow delete: if isSignedIn() && request.auth.uid == userId && isValidId(noteId);
+      }
+    }
+  }
+}

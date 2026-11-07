@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with study preferences, target examination, and daily progress goals.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user's auth UID" },
+        "name": { "type": "string", "description": "User's full name" },
+        "email": { "type": "string", "format": "email", "description": "User's email" },
+        "targetExamination": { "type": "string", "description": "Target exam e.g. UPSC, SSC CGL, Banking" },
+        "dailyQuestionTarget": { "type": "integer", "description": "Target number of daily questions" },
+        "preferredDifficulty": { "type": "string", "description": "Preferred difficulty: Easy, Medium, Hard" },
+        "studyStreak": { "type": "integer", "description": "Consecutive days studied" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server update timestamp" }
+      },
+      "required": ["userId", "name", "email", "targetExamination", "createdAt"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Recorded attempt for AI-generated quiz, PYQ practice, or revision test.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user's auth UID" },
+        "quizType": { "type": "string", "description": "AI_QUIZ, PYQ, or REVISION" },
+        "topic": { "type": "string", "description": "Subject or news topic" },
+        "targetExamination": { "type": "string", "description": "Target exam" },
+        "totalQuestions": { "type": "integer", "description": "Total question count" },
+        "attemptedQuestions": { "type": "integer", "description": "Number of attempted questions" },
+        "correctAnswers": { "type": "integer", "description": "Correct count" },
+        "incorrectAnswers": { "type": "integer", "description": "Incorrect count" },
+        "unattemptedQuestions": { "type": "integer", "description": "Unattempted count" },
+        "accuracy": { "type": "number", "description": "Accuracy percentage 0-100" },
+        "timeTakenSeconds": { "type": "integer", "description": "Time taken in seconds" },
+        "score": { "type": "number", "description": "Calculated score" },
+        "completedAt": { "type": "string", "format": "date-time", "description": "Completion timestamp" }
+      },
+      "required": ["userId", "quizType", "topic", "totalQuestions", "correctAnswers", "accuracy", "completedAt"]
+    },
+    "TopicPerformance": {
+      "title": "TopicPerformance",
+      "description": "Calculated performance and mastery status per subject/topic for weakness detection.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user's auth UID" },
+        "topic": { "type": "string", "description": "Subject name e.g. Indian Economy, Science & Tech" },
+        "attempted": { "type": "integer", "description": "Total questions attempted in this topic" },
+        "correct": { "type": "integer", "description": "Total correct" },
+        "incorrect": { "type": "integer", "description": "Total incorrect" },
+        "accuracy": { "type": "number", "description": "Overall accuracy percentage" },
+        "masteryLevel": { "type": "string", "description": "Weak, Needs Improvement, Good, or Strong" },
+        "weakConcepts": {
+          "type": "array",
+          "description": "List of sub-concepts identified as weak"
+        },
+        "repeatedMistakes": { "type": "integer", "description": "Count of repeated mistake concepts" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last evaluation timestamp" }
+      },
+      "required": ["userId", "topic", "attempted", "correct", "accuracy", "masteryLevel", "updatedAt"]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "Saved news articles, knowledge maps, questions, and revision notes.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user's auth UID" },
+        "contentType": { "type": "string", "description": "NEWS, KNOWLEDGE_MAP, QUESTION, or REVISION" },
+        "contentId": { "type": "string", "description": "Unique ID of the saved item" },
+        "title": { "type": "string", "description": "Headline or question title" },
+        "summary": { "type": "string", "description": "Short description or snippet" },
+        "category": { "type": "string", "description": "Category or subject" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "contentType", "contentId", "title", "createdAt"]
+    },
+    "KnowledgeMapDoc": {
+      "title": "KnowledgeMapDoc",
+      "description": "Saved interactive mind map generated by Gemini AI.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user's auth UID" },
+        "articleId": { "type": "string", "description": "Associated article ID" },
+        "mainTopic": { "type": "string", "description": "Main title / topic" },
+        "rawJson": { "type": "string", "description": "JSON representation of nodes and relationships" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "articleId", "mainTopic", "rawJson", "createdAt"]
+    },
+    "RevisionNoteDoc": {
+      "title": "RevisionNoteDoc",
+      "description": "Personalized revision note and targeted re-test generated by AI.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The user's auth UID" },
+        "topic": { "type": "string", "description": "Subject being revised" },
+        "concepts": { "type": "array", "description": "Targeted concepts" },
+        "summary": { "type": "string", "description": "High-yield revision summary" },
+        "keyFacts": { "type": "array", "description": "Bullet points of key facts" },
+        "previousAccuracy": { "type": "number", "description": "Accuracy before revision" },
+        "newAccuracy": { "type": "number", "description": "Accuracy achieved on re-test" },
+        "status": { "type": "string", "description": "Pending or Completed" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "topic", "summary", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile with preferences and goals"
+    },
+    "/users/{userId}/quizAttempts/{attemptId}": {
+      "schema": { "$ref": "#/entities/QuizAttempt" },
+      "description": "History of user quiz attempts"
+    },
+    "/users/{userId}/userPerformance/{topic}": {
+      "schema": { "$ref": "#/entities/TopicPerformance" },
+      "description": "Aggregated topic performance and weakness detection"
+    },
+    "/users/{userId}/bookmarks/{bookmarkId}": {
+      "schema": { "$ref": "#/entities/Bookmark" },
+      "description": "Saved user bookmarks"
+    },
+    "/users/{userId}/knowledgeMaps/{mapId}": {
+      "schema": { "$ref": "#/entities/KnowledgeMapDoc" },
+      "description": "Saved user knowledge maps"
+    },
+    "/users/{userId}/revisionNotes/{noteId}": {
+      "schema": { "$ref": "#/entities/RevisionNoteDoc" },
+      "description": "Personalized revision summaries and notes"
+    }
+  }
+}

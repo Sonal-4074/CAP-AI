@@ -1,0 +1,6 @@
+{
+  "name": "CAP AI",
+  "description": "Current Affairs Preparation with AI for competitive exams: AI news analysis, interactive knowledge maps, generated quizzes, PYQs, weakness detection, and adaptive revision.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
