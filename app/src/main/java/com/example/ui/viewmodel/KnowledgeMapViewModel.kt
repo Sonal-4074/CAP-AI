@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.model.KnowledgeMapData
 import com.example.data.model.MapNode
-import com.example.data.remote.GeminiAiService
+import com.example.data.remote.GroqAiService
 import com.example.data.repository.BookmarkRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +19,7 @@ sealed interface KnowledgeMapUiState {
 }
 
 class KnowledgeMapViewModel(
-    private val aiService: GeminiAiService,
+    private val aiService: GroqAiService,
     private val bookmarkRepo: BookmarkRepository
 ) : ViewModel() {
 

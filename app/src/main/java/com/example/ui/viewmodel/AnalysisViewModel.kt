@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.model.AiAnalysis
 import com.example.data.model.Article
-import com.example.data.remote.GeminiAiService
+import com.example.data.remote.GroqAiService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ sealed interface AnalysisUiState {
 }
 
 class AnalysisViewModel(
-    private val aiService: GeminiAiService
+    private val aiService: GroqAiService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<AnalysisUiState>(AnalysisUiState.Idle)

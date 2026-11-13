@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.data.local.CapDao
 import com.example.data.local.RevisionNoteEntity
 import com.example.data.model.RevisionSession
-import com.example.data.remote.GeminiAiService
+import com.example.data.remote.GroqAiService
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
@@ -20,7 +20,7 @@ private const val TAG = "RevisionRepository"
 class RevisionRepository(
     private val dao: CapDao,
     private val firestore: FirebaseFirestore,
-    private val aiService: GeminiAiService,
+    private val aiService: GroqAiService,
     private val performanceRepo: PerformanceRepository
 ) {
     private val auth = Firebase.auth

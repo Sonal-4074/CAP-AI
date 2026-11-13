@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.model.ExamQuestion
 import com.example.data.model.QuizAttempt
-import com.example.data.remote.GeminiAiService
+import com.example.data.remote.GroqAiService
 import com.example.data.repository.PerformanceRepository
 import com.example.data.repository.QuizRepository
 import kotlinx.coroutines.Job
@@ -34,7 +34,7 @@ sealed interface QuizSessionState {
 }
 
 class QuizViewModel(
-    private val aiService: GeminiAiService,
+    private val aiService: GroqAiService,
     private val quizRepo: QuizRepository,
     private val performanceRepo: PerformanceRepository
 ) : ViewModel() {

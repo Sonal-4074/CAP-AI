@@ -1,0 +1,61 @@
+{
+  "users": [
+    {
+      "_id": "efe8608e-c711-4782-9fd2-59c58e521968",
+      "fullName": "Rahul Sharma",
+      "email": "rahul.aspirant@example.com",
+      "passwordHash": "$2b$10$Iu3wMmQT0QF6vi/zx/x0I.PoIaTt7Hz/UGYHn83fuW91kQUu3Obu6",
+      "isEmailVerified": true,
+      "verificationOtp": null,
+      "otpExpiresAt": null,
+      "profilePicture": "",
+      "targetExaminations": [
+        "UPSC",
+        "State PSC"
+      ],
+      "preferredCategories": [
+        "National Affairs",
+        "Economy",
+        "Science and Technology"
+      ],
+      "difficultyLevel": "Hard",
+      "dailyQuestionTarget": 30,
+      "createdAt": "2026-11-07T12:17:51.194Z",
+      "lastLoginAt": "2026-11-07T12:17:51.401Z",
+      "updatedAt": "2026-11-07T12:17:51.414Z"
+    }
+  ],
+  "analyses": [],
+  "knowledgeMaps": [],
+  "generatedQuestions": [],
+  "quizAttempts": [
+    {
+      "_id": "8fe496a3-3b8a-4ab9-b4d2-c8ffe091fa67",
+      "userId": "efe8608e-c711-4782-9fd2-59c58e521968",
+      "topic": "Monetary Policy",
+      "score": 8,
+      "totalQuestions": 10,
+      "accuracy": 80,
+      "examType": "UPSC",
+      "answers": [],
+      "createdAt": "2026-11-07T12:17:51.421Z",
+      "updatedAt": "2026-11-07T12:17:51.421Z"
+    }
+  ],
+  "revisions": [],
+  "bookmarks": [],
+  "readingHistory": [],
+  "topicPerformance": [
+    {
+      "_id": "114d4353-7369-40ce-b2c6-790425811720",
+      "userId": "efe8608e-c711-4782-9fd2-59c58e521968",
+      "topic": "Monetary Policy",
+      "attempted": 10,
+      "correct": 8,
+      "accuracy": 80,
+      "masteryLevel": "Good",
+      "createdAt": "2026-11-07T12:17:51.421Z",
+      "updatedAt": "2026-11-07T12:17:51.421Z"
+    }
+  ]
+}

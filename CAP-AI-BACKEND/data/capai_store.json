@@ -1,0 +1,153 @@
+{
+  "users": [
+    {
+      "_id": "73cc0493-48a4-4f1a-9e09-304a6231d46c",
+      "fullName": "Aarav Sharma",
+      "email": "aspirant_1794056486266@capai.edu",
+      "password": "$2b$10$yOyWosMvCWPOXdF1xUqzeO4ioyLxaG.kh.cZNn3NV.v.AOnv38RZu",
+      "isEmailVerified": true,
+      "otp": {
+        "code": null,
+        "expiresAt": null
+      },
+      "targetExaminations": [
+        "UPSC",
+        "State PSC"
+      ],
+      "preferredCategories": [
+        "National",
+        "International",
+        "Economy",
+        "Science & Tech"
+      ],
+      "difficultyLevel": "Hard",
+      "dailyQuestionTarget": 30,
+      "createdAt": "2026-11-07T13:01:26.434Z",
+      "updatedAt": "2026-11-07T13:01:26.557Z"
+    },
+    {
+      "_id": "39fc545e-7b61-4c44-82e7-5740f1ad6cb4",
+      "fullName": "Aarav Sharma",
+      "email": "aspirant_1794056617760@capai.edu",
+      "password": "$2b$10$3gg.q1svuoLgZahEi4PpN.WgTn0sAgQADIT8Z8KZlBTD7xW9cFHG6",
+      "isEmailVerified": true,
+      "otp": {
+        "code": null,
+        "expiresAt": null
+      },
+      "targetExaminations": [
+        "UPSC",
+        "State PSC"
+      ],
+      "preferredCategories": [
+        "National",
+        "International",
+        "Economy",
+        "Science & Tech"
+      ],
+      "difficultyLevel": "Hard",
+      "dailyQuestionTarget": 30,
+      "createdAt": "2026-11-07T13:03:37.900Z",
+      "updatedAt": "2026-11-07T13:03:38.009Z"
+    }
+  ],
+  "currentAffairs": [],
+  "knowledgeMaps": [],
+  "questions": [],
+  "quizAttempts": [
+    {
+      "_id": "41840352-a007-44e5-b02d-a3ef3bef911c",
+      "userId": "73cc0493-48a4-4f1a-9e09-304a6231d46c",
+      "topic": "Indian Polity - Supreme Court Bench",
+      "score": 4,
+      "totalQuestions": 5,
+      "accuracy": 80,
+      "examType": "UPSC",
+      "answers": [],
+      "createdAt": "2026-11-07T13:01:26.581Z",
+      "updatedAt": "2026-11-07T13:01:26.582Z"
+    },
+    {
+      "_id": "84c3c7d5-7470-4f49-957f-ec97ac25d661",
+      "userId": "39fc545e-7b61-4c44-82e7-5740f1ad6cb4",
+      "topic": "Indian Polity - Supreme Court Bench",
+      "score": 4,
+      "totalQuestions": 5,
+      "accuracy": 80,
+      "examType": "UPSC",
+      "answers": [],
+      "createdAt": "2026-11-07T13:03:38.028Z",
+      "updatedAt": "2026-11-07T13:03:38.029Z"
+    }
+  ],
+  "userPerformances": [
+    {
+      "_id": "cccdaeec-f287-4943-971f-9522c334a03b",
+      "userId": "73cc0493-48a4-4f1a-9e09-304a6231d46c",
+      "totalAttempted": 5,
+      "totalCorrect": 4,
+      "overallAccuracy": 80,
+      "topicStats": [
+        {
+          "topic": "Indian Polity - Supreme Court Bench",
+          "attempted": 5,
+          "correct": 4,
+          "accuracy": 80,
+          "masteryLevel": "Strong"
+        }
+      ],
+      "weakTopics": [],
+      "strongTopics": [
+        "Indian Polity - Supreme Court Bench"
+      ],
+      "streakDays": 1,
+      "lastActiveDate": "2026-11-07T13:01:26.582Z",
+      "bookmarks": [
+        {
+          "articleId": "test_art_1",
+          "title": "Deep Ocean Mission",
+          "category": "Science & Tech",
+          "savedAt": "2026-11-07T13:01:26.589Z"
+        }
+      ],
+      "articlesReadCount": 1,
+      "createdAt": "2026-11-07T13:01:26.582Z",
+      "updatedAt": "2026-11-07T13:01:26.589Z"
+    },
+    {
+      "_id": "fd6dfbdf-942d-470a-a365-c0031f05bdad",
+      "userId": "39fc545e-7b61-4c44-82e7-5740f1ad6cb4",
+      "totalAttempted": 5,
+      "totalCorrect": 4,
+      "overallAccuracy": 80,
+      "topicStats": [
+        {
+          "topic": "Indian Polity - Supreme Court Bench",
+          "attempted": 5,
+          "correct": 4,
+          "accuracy": 80,
+          "masteryLevel": "Strong"
+        }
+      ],
+      "weakTopics": [],
+      "strongTopics": [
+        "Indian Polity - Supreme Court Bench"
+      ],
+      "streakDays": 1,
+      "lastActiveDate": "2026-11-07T13:03:38.029Z",
+      "bookmarks": [
+        {
+          "articleId": "test_art_1",
+          "title": "Deep Ocean Mission",
+          "category": "Science & Tech",
+          "savedAt": "2026-11-07T13:03:38.036Z"
+        }
+      ],
+      "articlesReadCount": 1,
+      "createdAt": "2026-11-07T13:03:38.029Z",
+      "updatedAt": "2026-11-07T13:03:38.036Z"
+    }
+  ],
+  "revisionHistories": [],
+  "bookmarks": []
+}

@@ -252,7 +252,7 @@ fun ProfileScreen(
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "CAP AI (Current Affairs Preparation with AI) is an advanced educational platform for Indian competitive exam aspirants (UPSC, SSC, Banking, Railway, State PSC). Designed with Gemini AI for real-time news analysis, interactive knowledge maps, weakness detection, and adaptive mastery revision.",
+                        text = "CAP AI (Current Affairs Preparation with AI) is an advanced educational platform for Indian competitive exam aspirants (UPSC, SSC, Banking, Railway, State PSC). Powered by high-speed Groq AI for real-time news analysis, interactive knowledge maps, weakness detection, and adaptive mastery revision.",
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 17.sp
@@ -279,6 +279,23 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Sign Out", fontWeight = FontWeight.Bold)
                 }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                androidx.compose.material3.TextButton(
+                    onClick = { viewModel.signOut(onSignOut) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("delete_account_button")
+                ) {
+                    Text(
+                        text = "Delete Account & Clear Local Data",
+                        color = MaterialTheme.colorScheme.error.copy(alpha = 0.7f),
+                        fontSize = 13.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(80.dp))
             }
         }
     }
